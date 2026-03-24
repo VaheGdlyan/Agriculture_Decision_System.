@@ -1,6 +1,7 @@
 import ast
 import pandas as pd
 import torch
+import os
 from pathlib import Path
 from PIL import Image
 from torch.utils.data import Dataset
@@ -10,11 +11,15 @@ class WheatDataset(Dataset):
     """
     Dataset for GWHD metadata CSV with columns:
     image_id, path, width, height, bbox_count, boxes
-    where boxes are COCO xywh: [x, y, w, h].
     """
 
     def __init__(self, csv_file, root_dir=".", transforms=None):
-        self.df = pd.read_csv(csv_file)
+        # FIX: Robustly handle both a path string and an already loaded DataFrame
+        if isinstance(csv_file, (str, Path)):
+            self.df = pd.read_csv(str(csv_file))
+        else:
+            self.df = csv_file
+            
         self.root_dir = Path(root_dir)
         self.transforms = transforms
         self.to_tensor = ToTensor()
@@ -23,16 +28,23 @@ class WheatDataset(Dataset):
         return len(self.df)
 
     def __getitem__(self, idx):
+        # FIX: Ensure idx is a plain integer (converts torch.Tensor to int)
+        if torch.is_tensor(idx):
+            idx = idx.tolist() 
+
         row = self.df.iloc[idx]
 
-        # Support both path styles:
-        # 1) CSV already contains project-relative/full path (e.g. data/raw/gwhd2020/...)
-        # 2) CSV contains relative path under root_dir (e.g. arvalis_1/....png)
-        raw_path = Path(str(row["path"]))
-        img_path = raw_path if raw_path.exists() else (self.root_dir / raw_path)
+        # FIX: Ensure we are joining the path correctly
+        # If row["path"] is 'arvalis_1/ethz_1.jpg', it joins with root_dir
+        raw_path_str = str(row["path"])
+        img_path = self.root_dir / raw_path_str
 
         if not img_path.exists():
-            raise FileNotFoundError(f"Could not find image at: {img_path.resolve()}")
+            # Fallback check: maybe the path in CSV is already absolute?
+            if Path(raw_path_str).exists():
+                img_path = Path(raw_path_str)
+            else:
+                raise FileNotFoundError(f"Could not find image at: {img_path.resolve()}")
 
         image = Image.open(img_path).convert("RGB")
 
@@ -42,13 +54,17 @@ class WheatDataset(Dataset):
         
         for box in boxes_xywh:
             x, y, w, h = [float(v) for v in box]
-            # Convert COCO [x, y, w, h] to Pascal VOC [x1, y1, x2, y2] for PyTorch
+            # Convert COCO [x, y, w, h] to Pascal VOC [x1, y1, x2, y2]
             boxes_xyxy.append([x, y, x + w, y + h])
 
-        boxes = torch.tensor(boxes_xyxy, dtype=torch.float32)
+        # Handle images with zero boxes to avoid training crashes
+        if len(boxes_xyxy) == 0:
+            boxes = torch.zeros((0, 4), dtype=torch.float32)
+        else:
+            boxes = torch.tensor(boxes_xyxy, dtype=torch.float32)
+            
         labels = torch.ones((boxes.shape[0],), dtype=torch.int64)  # class 1: wheat_head
         
-        # Calculate area for the COCO evaluator
         if boxes.numel() > 0:
             area = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
         else:
@@ -59,23 +75,19 @@ class WheatDataset(Dataset):
         target = {
             "boxes": boxes,
             "labels": labels,
-            "image_id": torch.tensor([idx], dtype=torch.int64), # Using index as unique ID
+            "image_id": torch.tensor([idx], dtype=torch.int64),
             "area": area,
             "iscrowd": iscrowd,
         }
 
+        # Handle Transformations
         if self.transforms:
             try:
-                transformed = self.transforms(
-                    image=image,
-                    bboxes=boxes_xyxy,
-                    labels=labels.tolist(),
-                )
-                image = transformed["image"]
-                target["boxes"] = torch.tensor(transformed["bboxes"], dtype=torch.float32)
-                target["labels"] = torch.tensor(transformed["labels"], dtype=torch.int64)
-            except Exception:
-                # Fallback for basic torchvision transforms
+                # Assuming Albumentations format
+                sample = self.transforms(image=np.array(image), bboxes=boxes.tolist(), labels=labels.tolist())
+                image = sample['image']
+                target['boxes'] = torch.tensor(sample['bboxes'], dtype=torch.float32)
+            except:
                 image = self.transforms(image)
         else:
             image = self.to_tensor(image)
@@ -84,30 +96,3 @@ class WheatDataset(Dataset):
 
 def detection_collate_fn(batch):
     return tuple(zip(*batch))
-
-# --- TEST BLOCK ---
-if __name__ == "__main__":
-    # Correct paths based on your Cursor sidebar
-    CSV_PATH = "data/processed/train.csv"
-    IMAGE_DIR = "."
-
-    print(f"📂 Checking Dataset logic...")
-    
-    try:
-        dataset = WheatDataset(csv_file=CSV_PATH, root_dir=IMAGE_DIR)
-        
-        if len(dataset) == 0:
-            print("⚠️ CSV is empty! Check data/processed/train.csv")
-        else:
-            img, tar = dataset[0]
-            print("\n" + "="*30)
-            print("✅ SUCCESS: Dataset Loaded!")
-            print(f"📊 Total Images: {len(dataset)}")
-            print(f"🖼️  Image Shape: {img.shape}")
-            print(f"🌾 Boxes in first image: {len(tar['boxes'])}")
-            print("="*30 + "\n")
-            
-    except FileNotFoundError as e:
-        print(f"\n❌ PATH ERROR: {e}")
-    except Exception as e:
-        print(f"\n❌ LOGIC ERROR: {e}")
