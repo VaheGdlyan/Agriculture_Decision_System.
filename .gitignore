@@ -1,13 +1,22 @@
-# Ignore the environment
-venv/
-.venv/
-venv*/
-
-# Ignore the heavy data (Kaggle)
-data/
-outputs/
-
-# Ignore Python "trash" files
+# Python
 __pycache__/
 *.pyc
+
+# Virtual environment
+venv/
+.env
+
+# Data (Ignore raw images but keep processed metadata)
+data/raw/
+
+# Model outputs (trained weights and logs)
+outputs/
+*.pth
+*.pt
+
+# Jupyter
 .ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db 
