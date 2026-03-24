@@ -1,5 +1,7 @@
 # Ignore the environment
 venv/
+.venv/
+venv*/
 
 # Ignore the heavy data (Kaggle)
 data/
