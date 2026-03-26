@@ -1,0 +1,4 @@
+path: /content/dataset
+train: images/train
+val: images/val
+names: {0: wheat_head}

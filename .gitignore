@@ -19,4 +19,20 @@ outputs/
 
 # OS files
 .DS_Store
-Thumbs.db 
+Thumbs.db  
+
+# Ignore YOLO processed datasets (Too large for Git)
+data/processed/yolo/
+
+# Ignore YOLOv8 baseline artifacts (weights and telemetry images)
+outputs/yolov8_baseline_640/*.pt
+outputs/yolov8_baseline_640/*.png
+outputs/yolov8_baseline_640/*.jpg
+
+# Ignore raw YOLOv8 datasets if they are generated locally
+dataset/
+runs/
+
+# Ignore Colab-specific files
+.config/
+
