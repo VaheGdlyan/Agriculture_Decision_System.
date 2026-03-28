@@ -1,0 +1,28 @@
+# YOLOv8 Custom Hyperparameter Configuration - Iteration 2
+# Designed via Error-Driven EDA
+
+# 1. Color and Lighting Jitter (The Camouflage Fix)
+hsv_h: 0.015       # Image HSV-Hue augmentation
+hsv_s: 0.7         # Image HSV-Saturation augmentation (Increased)
+hsv_v: 0.6         # Image HSV-Value augmentation (Increased)
+
+# 2. Geometric Augmentation (The Occlusion Fix)
+degrees: 0.0       # Image rotation (+/- deg)
+translate: 0.1     # Image translation (+/- fraction)
+scale: 0.5         # Image scale (+/- gain)
+flipud: 0.5        # Image flip up-down (Added for directional variance)
+fliplr: 0.5        # Image flip left-right
+mosaic: 1.0        # Image mosaic - Force 100%
+mixup: 0.2         # Image mixup - Added to simulate canopy noise
+
+# 3. Loss Multipliers (The Hallucination Fix)
+box: 9.0           # Box loss gain - Cranked up to punish sloppy localization
+cls: 0.3           # Cls loss gain - Lowered for single-class target
+dfl: 1.5           # Distribution Focal Loss gain
+
+# 4. Standard Optimizer Settings
+lr0: 0.01          # Initial learning rate
+lrf: 0.01          # Final learning rate: at the deeper epochs it will be 0.01 * 0.01
+momentum: 0.937    # Optimizer momentum
+weight_decay: 0.0005 # Weight decay
+warmup_epochs: 3.0 # Warmup epochs  
