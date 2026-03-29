@@ -63,3 +63,32 @@ __pycache__/
 # Cloud Transfer Payloads
 *.tar.gz
 *.zip 
+
+# Python / Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+# Ultralytics / YOLO Specific
+runs/
+yolov8n.pt
+yolov8s.pt
+*.pt
+*.engine
+*.onnx
+
+# Data & Datasets (CRITICAL: Do not push massive datasets)
+data/images/
+data/labels/
+*.zip
+*.tar.gz
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# OS generated files
+.DS_Store
+Thumbs.db 

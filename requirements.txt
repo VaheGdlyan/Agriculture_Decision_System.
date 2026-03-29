@@ -37,3 +37,16 @@ tzdata==2025.3
 ultralytics==8.4.30
 ultralytics-thop==2.0.18
 urllib3==2.6.3
+# Core ML & Vision
+ultralytics>=8.0.0
+torch
+torchvision
+opencv-python
+
+# Data Manipulation & Analysis
+pandas
+numpy
+
+# Visualization Dashboards
+matplotlib
+seaborn
