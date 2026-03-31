@@ -40,7 +40,7 @@ if "counts" not in st.session_state:
 # ---------------------------------------------------------------------------
 @st.cache_resource(show_spinner="Loading Network...")
 def load_agrivision_model():
-    return get_model("outputs/iteration_2_tuned/eval_metrics/iteration_2_tuned.pt")
+    return get_model("iteration_2_tuned.pt")
 
 
 # ---------------------------------------------------------------------------

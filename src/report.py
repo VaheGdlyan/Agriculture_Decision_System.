@@ -91,4 +91,4 @@ def generate_pdf_report(
     pdf.cell(40, line_h, f"{iou_thresh:.2f}", border=0, ln=1)
     
     # Dump to bytes (Explicitly cast to bytes to prevent Streamlit bytearray exception)
-    return bytes(pdf.output())
+    return pdf.output(dest='S').encode('latin-1') 
