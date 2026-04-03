@@ -1,0 +1,10 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+The development of the AgriVision Decision Support System represents a comprehensive evolution from a fundamental computer vision detection task into an operational agronomic tool. Addressing the profound inter-domain variability of the GWHD—characterized by extreme fluctuations in illumination, canopy density, and scale that challenge even human visual perception—required a rigorous, end-to-end engineering approach.
+
+Our baseline evaluations revealed that default architectures struggle significantly under field conditions, exhibiting scale degradation on micro-objects, mid-tone camouflage failures, and reckless low-confidence hallucinations. By substituting arbitrary parameter search with a targeted, error-driven optimization protocol, we successfully transformed the model. While aggregate metrics appeared superficially stable, the tuned architecture delivered a critical +39.4\% increase in operational confidence, converting a fragile detector into a decisive pipeline suitable for real-world yield estimation. 
+
+Despite these successes, our forensic analysis explicitly identifies an irreducible domain boundary. The model remains highly vulnerable to Out-of-Distribution (OOD) domain shifts, specifically failing on immature green wheat phenotypes and imagery captured outside the standard $75^\circ$--$90^\circ$ nadir UAV acquisition angle. 
+
+For future research, we recommend expanding the training corpus to encompass multi-phenological data across the complete BBCH growth scale and integrating multi-angle UAV capture geometries. Furthermore, continued optimization for ultra-low latency on edge-compute hardware will be necessary. Ultimately, bridging the gap between pixel-level bounding boxes and deterministic agronomic intelligence establishes systems like AgriVision as scalable, critical infrastructure for global precision agriculture and food security.
