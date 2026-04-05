@@ -12,12 +12,15 @@
 
 ---
 
-## 🚀 Live Demo & 📄 Research Paper
+---
 
-| | |
-|:---|:---|
-| 🔗 **[AgriVision-Engine on Hugging Face](https://huggingface.co/spaces/gdlyanvahe/AgriVision-Engine)** | Interactive cloud deployment — upload drone imagery and receive real-time yield analytics. |
-| 📥 **[AgriVision Research Paper (CVPR Format)](AgriVision_Paper/AgriVision_CVPR_Draft.pdf)** | Full mathematical foundations, error-driven hyperparameter optimization, and ablation study. |
+### 🚀 Engineering Deployment & Live Documentation with Research Paper
+
+| Resource | Description | Action |
+| :--- | :--- | :--- |
+| **Production Inference Engine** | Live YOLOv8 pipeline hosted on Hugging Face Space. | [**Run Live Demo**](https://huggingface.co/spaces/VaheGdlyan/AgriVision) |
+| **Technical Architecture** | Interactive Reveal.js slide deck (Socratic Method). | [**View Presentation**](https://vahegdlyan.github.io/Agriculture_Decision_System./presentation/index.html) |
+| **Research Foundations** | Full mathematical breakdown and ablation study (CVPR). | [**Read Research Paper**](https://github.com/VaheGdlyan/Agriculture_Decision_System/blob/main/docs/AgriVision_Paper.pdf) |
 
 ---
 
@@ -267,3 +270,4 @@ If you use this work in your research, please cite:
 ## License
 
 This project is open-source and released under the **[MIT License](LICENSE)**. 
+ 
