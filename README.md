@@ -18,7 +18,7 @@
 
 | Resource | Description | Action |
 | :--- | :--- | :--- |
-| **Production Inference Engine** | Live YOLOv8 pipeline hosted on Hugging Face Space. | [**Run Live Demo**](https://huggingface.co/spaces/VaheGdlyan/AgriVision) |
+| **Production Inference Engine** | Live YOLOv8 pipeline hosted on Hugging Face Space. | [**Run Live Demo**](https://huggingface.co/spaces/gdlyanvahe/AgriVision-Engine) |
 | **Technical Architecture** | Interactive Reveal.js slide deck (Socratic Method). | [**View Presentation**](https://vahegdlyan.github.io/Agriculture_Decision_System./presentation/index.html) |
 | **Research Foundations** | Full mathematical breakdown and ablation study (CVPR). | [**Read Research Paper**](https://github.com/VaheGdlyan/Agriculture_Decision_System/blob/main/docs/AgriVision_Paper.pdf) |
 
